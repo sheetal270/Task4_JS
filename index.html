@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Professional Time Counter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(to right, #3494e6, #ec6ead);
+            color: white;
+        }
+
+        header {
+            
+            padding: 10px;
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 80px;
+        }
+
+        #counter {
+            font-size: 50px;
+            margin-bottom: 20px;
+        }
+
+        .unit-buttons {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        button {
+            font-size: 24px;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #232323;
+            padding: 10px;
+            text-align: center;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<header>Professional Time Counter</header>
+
+<div id="counter">00:00:00</div>
+
+<div class="unit-buttons">
+    <button onclick="countUp()"><i class="fas fa-arrow-up"></i> Count Up</button>
+    <button onclick="countDown()"><i class="fas fa-arrow-down"></i> Count Down</button>
+    <button onclick="pause()"><i class="fas fa-play"></i> Pause</button>
+</div>
+
+<footer>
+    Developed by: Sheetal Pisal
+</footer>
+
+<script>
+    var timer = {
+        hours: 0,
+        minutes: 0,
+        seconds: 0
+    };
+
+    var intervalId;
+
+    function updateCounter() {
+        var formattedTime = formatTime(timer.hours) + ':' + formatTime(timer.minutes) + ':' + formatTime(timer.seconds);
+        document.getElementById('counter').innerText = formattedTime;
+    }
+
+    function formatTime(value) {
+        return value < 10 ? '0' + value : value;
+    }
+function toggleTimer() {
+        if (intervalId === undefined || intervalId === null) {
+            startTimer();
+        } else {
+            pause();
+        }
+    }
+
+     function startTimer() {
+        intervalId = setInterval(function () {
+            timer.seconds++;
+            if (timer.seconds === 60) {
+                timer.seconds = 0;
+                timer.minutes++;
+                if (timer.minutes === 60) {
+                    timer.minutes = 0;
+                    timer.hours++;
+                }
+            }
+            updateCounter();
+        }, 1000);
+    }
+
+    function countUp() {
+        clearInterval(intervalId);
+        intervalId = setInterval(function () {
+            timer.seconds++;
+            if (timer.seconds === 60) {
+                timer.seconds = 0;
+                timer.minutes++;
+                if (timer.minutes === 60) {
+                    timer.minutes = 0;
+                    timer.hours++;
+                }
+            }
+            updateCounter();
+        }, 1000);
+    }
+
+    function countDown() {
+        clearInterval(intervalId);
+        intervalId = setInterval(function () {
+            if (timer.hours === 0 && timer.minutes === 0 && timer.seconds === 0) {
+                clearInterval(intervalId);
+            } else {
+                timer.seconds--;
+                if (timer.seconds === -1) {
+                    timer.seconds = 59;
+                    timer.minutes--;
+                    if (timer.minutes === -1) {
+                        timer.minutes = 59;
+                        timer.hours--;
+                    }
+                }
+                updateCounter();
+            }
+        }, 1000);
+    }
+
+  function pause() {
+        clearInterval(intervalId);
+        intervalId = null;
+    }
+</script>
+
+</body>
+</html>
